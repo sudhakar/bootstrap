@@ -140,14 +140,20 @@ angular.module( 'ui.bootstrap.tooltip', [ 'ui.bootstrap.position' ] )
             if ( scope.tt_popupDelay ) {
               popupTimeout = $timeout( show, scope.tt_popupDelay );
             } else {
-              scope.$apply( show );
+              if (!scope.$$phase) {
+                scope.$apply(show);
+              } else {
+                show();
+              }
             }
           }
 
           function hideTooltipBind () {
-            scope.$apply(function () {
+            if (!scope.$$phase) {
+              scope.$apply(hide);
+            } else {
               hide();
-            });
+            }
           }
           
           // Show the tooltip popup element.
